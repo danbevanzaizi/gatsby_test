@@ -1,0 +1,115 @@
+{
+  "nodeRules": [
+    {
+      "id": "personRule",
+      "create": {
+        "withAttributes": [
+          {
+            "name": "type",
+            "value": {
+              "type": "VALUE",
+              "value": "person"
+            }
+          },
+          {
+            "name": "label",
+            "value": {
+              "type": "INTERPOLATE",
+              "value": "${firstName} ${lastName}"
+            }
+          },
+          {
+            "name": "properties.firstName",
+            "value": {
+              "type": "REFERENCE",
+              "value": "firstName"
+            }
+          },
+          {
+            "name": "properties.lastName",
+            "value": {
+              "type": "REFERENCE",
+              "value": "lastName"
+            }
+          },
+          {
+            "name": "properties.role",
+            "value": {
+              "type": "REFERENCE",
+              "value": "role"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "addressRule",
+      "when": {
+        "type": "COMPARISON",
+        "field": "address",
+        "operator": "exists"
+      },
+      "create": {
+        "withAttributes": [
+          {
+            "name": "type",
+            "value": {
+              "type": "VALUE",
+              "value": "location"
+            }
+          },
+          {
+            "name": "label",
+            "value": {
+              "type": "INTERPOLATE",
+              "value": "${address}"
+            }
+          },
+          {
+            "name": "properties.address",
+            "value": {
+              "type": "REFERENCE",
+              "value": "address"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "edgeRules": [
+    {
+      "id": "livesAtEdgeRule",
+      "when": {
+        "type": "RULES_MATCH",
+        "sourceRule": "personRule",
+        "targetRule": "addressRule"
+      },
+      "create": {
+        "withAttributes": [
+          {
+            "name": "type",
+            "value": {
+              "type": "VALUE",
+              "value": "livesAt"
+            }
+          },
+          {
+            "name": "label",
+            "value": {
+              "type": "VALUE",
+              "value": "Lives At"
+            }
+          },
+          {
+            "name": "properties.description",
+            "value": {
+              "type": "INTERPOLATE",
+              "value": "${firstName} ${lastName} lives at 
+${address}"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
